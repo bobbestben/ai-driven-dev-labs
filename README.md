@@ -11,6 +11,36 @@
      > If you are using [GitHub Copilot](.github/copilot-instructions.md), instructions are inside `.github/copilot-instructions.md`  
      > If you are using Claude Code, instructions are inside [Claude.md](Claude.md)
 
+### Running Locally
+
+**Greenfield:**
+
+```bash
+# Backend (port 8080)
+cd greenfield-backend
+npm install
+npm run dev
+
+# Frontend (port 5173) — in a separate terminal
+cd greenfield-frontend
+npm install
+npm run dev
+```
+
+**Brownfield:**
+
+```bash
+# Backend (port 8080)
+cd brownfield-backend
+npm install
+npm run dev
+
+# Frontend (port 5173) — in a separate terminal
+cd brownfield-frontend
+npm install
+npm run dev
+```
+
 ### Running with Docker
 
 If you don't have Java or Node, but you have docker, you can run the applications within docker as well.
