@@ -6,7 +6,7 @@
 
 1. **Install development tools:**
    - Install VSCode
-   - Install Node.js v22
+   - Install Node.js v22 or above
    - Install an AI coding assistant of your choice (Copilot, Claude Code, Cursor…)
      > If you are using [GitHub Copilot](.github/copilot-instructions.md), instructions are inside `.github/copilot-instructions.md`  
      > If you are using Claude Code, instructions are inside [Claude.md](Claude.md)
