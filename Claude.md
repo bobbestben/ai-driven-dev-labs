@@ -4,16 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-### Backend (Maven, Java 21)
+### Backend (Node.js 22, npm)
 
 ```bash
 cd greenfield-backend  # or brownfield-backend
-mvn spring-boot:run    # Start on port 8080
-mvn test               # Run all tests
-mvn test -Dtest=ClassName  # Run a single test class
+npm run dev    # Start on port 8080
+npm test       # Run all tests
+npm test -- --reporter=verbose  # Run tests with details
 ```
 
-Swagger UI: `http://localhost:8080/swagger-ui.html`
+Swagger UI: `http://localhost:8080/api-docs`
 
 ### Frontend (Node 22, npm)
 
@@ -29,7 +29,7 @@ npm run build  # TypeScript compile + Vite build
 
 Always consult the architecture documents before making changes:
 
-- **Backend**: See [architecture-backend](docs/tech/architecture-backend.md) for package structure, DDD organization, backend coding practices, database and JPA entity conventions, controller patterns, and JUnit testing standards.
+- **Backend**: See [architecture-backend](docs/tech/architecture-backend.md) for package structure, DDD organization, backend coding practices, database and TypeORM entity conventions, router patterns, and Vitest testing standards.
 
 - **Frontend**: See [architecture-frontend](docs/tech/architecture-frontend.md) for naming conventions, component structure, API integration patterns, testing guidelines, and code quality standards.
 
