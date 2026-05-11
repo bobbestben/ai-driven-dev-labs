@@ -43,7 +43,7 @@ npm run dev
 
 ### Running with Docker
 
-If you don't have Java or Node, but you have docker, you can run the applications within docker as well.
+If you don't have Node installed, but you have docker, you can run the applications within docker as well.
 
 Each application (greenfield and brownfield) has its own Docker Compose file. They cannot be run at the same time as they share the same ports.
 
