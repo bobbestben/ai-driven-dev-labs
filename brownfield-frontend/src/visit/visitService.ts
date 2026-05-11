@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api/v1/visits';
+const API_BASE_URL = "http://localhost:8080/api/v1/visits";
 
 export interface Pet {
   id: number;
@@ -25,7 +25,7 @@ export const visitService = {
   async findAll(): Promise<Visit[]> {
     const response = await fetch(API_BASE_URL);
     if (!response.ok) {
-      throw new Error('Failed to fetch visits');
+      throw new Error("Failed to fetch visits");
     }
     return response.json();
   },

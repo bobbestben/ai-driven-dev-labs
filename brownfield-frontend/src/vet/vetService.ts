@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api/v1/vets';
+const API_BASE_URL = "http://localhost:8080/api/v1/vets";
 
 export interface Vet {
   id?: number;
@@ -10,7 +10,7 @@ export const vetService = {
   async findAll(): Promise<Vet[]> {
     const response = await fetch(API_BASE_URL);
     if (!response.ok) {
-      throw new Error('Failed to fetch vets');
+      throw new Error("Failed to fetch vets");
     }
     return response.json();
   },
@@ -18,7 +18,7 @@ export const vetService = {
   async findById(id: number): Promise<Vet> {
     const response = await fetch(`${API_BASE_URL}/${id}`);
     if (!response.ok) {
-      throw new Error('Failed to fetch vet');
+      throw new Error("Failed to fetch vet");
     }
     return response.json();
   },
@@ -26,8 +26,8 @@ export const vetService = {
   async findByName(name: string): Promise<Vet> {
     const response = await fetch(`${API_BASE_URL}/name/${name}`);
     if (!response.ok) {
-      throw new Error('Failed to fetch vet');
+      throw new Error("Failed to fetch vet");
     }
     return response.json();
-  }
+  },
 };

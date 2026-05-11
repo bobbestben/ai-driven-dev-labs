@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api/v1/pets';
+const API_BASE_URL = "http://localhost:8080/api/v1/pets";
 
 export interface Pet {
   id?: number;
@@ -10,7 +10,7 @@ export const petService = {
   async findAll(): Promise<Pet[]> {
     const response = await fetch(API_BASE_URL);
     if (!response.ok) {
-      throw new Error('Failed to fetch pets');
+      throw new Error("Failed to fetch pets");
     }
     return response.json();
   },
@@ -33,21 +33,21 @@ export const petService = {
 
   async save(pet: Pet): Promise<Pet> {
     const response = await fetch(API_BASE_URL, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(pet),
     });
     if (!response.ok) {
-      throw new Error('Failed to save pet');
+      throw new Error("Failed to save pet");
     }
     return response.json();
   },
 
   async delete(id: number): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
     if (!response.ok) {
       throw new Error(`Failed to delete pet with id ${id}`);
