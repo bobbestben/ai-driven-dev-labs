@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="chupa-chups">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pomodoro — Chupa Chups Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:    #EE2124;
+      --yellow: #FFD700;
+      --white:  #FFFFFF;
+      --dark:   #222222;
+      --pink:   #FF6B9D;
+      --orange: #FF8C00;
+      --green:  #4CAF50;
+      --bg:     #FFF8E7;
+      --ring-focus:  #EE2124;
+      --ring-break:  #4CAF50;
+      --ring-long:   #8B5CF6;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 40px;
+      overflow-x: hidden;
+    }
+
+    /* ─── Background Polka Dots ────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, #EE212418 6px, transparent 6px),
+        radial-gradient(circle, #FFD70018 4px, transparent 4px);
+      background-size: 60px 60px, 30px 30px;
+      background-position: 0 0, 15px 15px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── Header / Logo ────────────────────────────────────── */
+    .logo-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .logo-flower {
+      width: 72px;
+      height: 72px;
+      margin-bottom: 4px;
+    }
+
+    .logo-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2rem;
+      color: var(--red);
+      letter-spacing: 1px;
+      text-shadow: 3px 3px 0 var(--yellow);
+    }
+
+    .logo-sub {
+      font-size: 0.75rem;
+      color: var(--dark);
+      opacity: 0.55;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ─── Mode Tabs ─────────────────────────────────────────── */
+    .mode-tabs {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 8px;
+      margin: 18px 0 24px;
+      background: rgba(255,255,255,0.7);
+      padding: 6px;
+      border-radius: 50px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .mode-btn {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 7px 16px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      background: transparent;
+      color: #888;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      letter-spacing: 0.5px;
+    }
+
+    .mode-btn:hover { transform: scale(1.05); }
+
+    .mode-btn.active-focus  { background: var(--red);    color: #fff; }
+    .mode-btn.active-break  { background: var(--green);  color: #fff; }
+    .mode-btn.active-long   { background: #8B5CF6;       color: #fff; }
+
+    /* ─── Timer Card ─────────────────────────────────────────── */
+    .card {
+      position: relative;
+      z-index: 1;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 36px 32px 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    /* ─── SVG Ring ───────────────────────────────────────────── */
+    .ring-wrap {
+      position: relative;
+      width: 220px;
+      height: 220px;
+    }
+
+    .ring-wrap svg {
+      transform: rotate(-90deg);
+      width: 220px;
+      height: 220px;
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: #F0F0F0;
+      stroke-width: 14;
+    }
+
+    .ring-progress {
+      fill: none;
+      stroke: var(--ring-focus);
+      stroke-width: 14;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear, stroke 0.4s;
+    }
+
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .time-display {
+      font-family: 'Fredoka One', cursive;
+      font-size: 3.4rem;
+      color: var(--dark);
+      line-height: 1;
+    }
+
+    .mode-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-top: 4px;
+    }
+
+    /* ─── Controls ───────────────────────────────────────────── */
+    .controls {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .btn {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      letter-spacing: 0.5px;
+    }
+
+    .btn:hover  { transform: scale(1.06); }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      padding: 14px 38px;
+      background: var(--red);
+      color: #fff;
+      font-size: 1rem;
+      box-shadow: 0 4px 16px rgba(238,33,36,0.35);
+    }
+
+    .btn-primary.break-mode  { background: var(--green);  box-shadow: 0 4px 16px rgba(76,175,80,0.35); }
+    .btn-primary.long-mode   { background: #8B5CF6;       box-shadow: 0 4px 16px rgba(139,92,246,0.35); }
+
+    .btn-secondary {
+      padding: 12px 20px;
+      background: #F5F5F5;
+      color: #666;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    /* ─── Session Counter ────────────────────────────────────── */
+    .session-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .session-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #bbb;
+    }
+
+    .dots-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #EEE;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .dot.filled { background: var(--red); transform: scale(1.15); }
+    .dot.long   { background: #8B5CF6; transform: scale(1.15); }
+
+    /* ─── Settings Row ───────────────────────────────────────── */
+    .settings-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .setting-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 16px;
+      padding: 10px 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      min-width: 120px;
+    }
+
+    .setting-group label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #bbb;
+    }
+
+    .setting-group input[type="number"] {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.4rem;
+      color: var(--dark);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #EEE;
+      width: 64px;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .setting-group input[type="number"]:focus {
+      border-color: var(--red);
+    }
+
+    /* ─── Lollipop stick decoration ─────────────────────────── */
+    .stick-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      margin-top: -6px;
+    }
+
+    .stick {
+      width: 6px;
+      height: 40px;
+      background: linear-gradient(to bottom, #D4A96A, #C49A62);
+      border-radius: 0 0 4px 4px;
+      box-shadow: inset -2px 0 4px rgba(0,0,0,0.15);
+    }
+
+    /* ─── Toast notification ─────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--dark);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 12px 28px;
+      border-radius: 50px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s;
+      opacity: 0;
+      z-index: 100;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* ─── data-mode theming ─────────────────────────────────── */
+    body[data-mode="rest"] {
+      --bg: #FFF5E4;
+      --ring-focus: var(--green);
+    }
+
+    /* ─── Inactive button state ─────────────────────────────── */
+    .inactive {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* ─── Flash animation (notification fallback) ───────────── */
+    @keyframes flash {
+      0%, 100% { background: var(--white); }
+      25%, 75%  { background: #FFD700; }
+      50%       { background: #FF6B00; }
+    }
+
+    .card.flash {
+      animation: flash 0.8s ease;
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .logo-title { font-size: 1.5rem; }
+      .time-display { font-size: 2.6rem; }
+      .ring-wrap, .ring-wrap svg { width: 180px; height: 180px; }
+      .card { padding: 24px 16px 20px; }
+      .btn-primary { padding: 12px 28px; font-size: 0.9rem; }
+      .settings-row { gap: 10px; }
+      .setting-group { min-width: 90px; padding: 8px 12px; }
+    }
+
+    /* ─── Coca-Cola theme ──────────────────────────────── */
+    html[data-theme="coca-cola"] {
+      --red:        #F40009;
+      --yellow:     #FFFAF0;
+      --pink:       #C0000A;
+      --bg:         #FFFAF0;
+      --ring-focus: #F40009;
+      --ring-break: #C0000A;
+      --ring-long:  #8B0000;
+    }
+
+    html[data-theme="coca-cola"] body::before {
+      background-image:
+        radial-gradient(circle, #F4000918 6px, transparent 6px),
+        radial-gradient(circle, #FFFAF018 4px, transparent 4px);
+    }
+
+    html[data-theme="coca-cola"] body[data-mode="rest"] {
+      --bg:         #FFF0F0;
+      --ring-focus: #C0000A;
+    }
+
+    /* ─── Decoration visibility ──────────────────────────── */
+    .logo-cola {
+      width: 72px;
+      height: 72px;
+      margin-bottom: 4px;
+      display: none;
+    }
+    html[data-theme="coca-cola"] .logo-flower { display: none; }
+    html[data-theme="coca-cola"] .logo-cola   { display: block; }
+    html[data-theme="coca-cola"] .stick-wrap  { display: none; }
+
+    /* ─── Theme toggle button ───────────────────────────── */
+    #btn-theme-toggle {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.85);
+      color: var(--dark);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.15s;
+      letter-spacing: 0.5px;
+      position: relative;
+      z-index: 1;
+      margin-top: 8px;
+    }
+    #btn-theme-toggle:hover { transform: scale(1.05); }
+
+    /* ─── Body theme transition ───────────────────────────── */
+    body { transition: background-color 0.3s; }
+  </style>
+  <script>
+    (function() {
+      var t = localStorage.getItem('pomodoroTheme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body data-mode="focus">
+
+  <!-- Header / Logo -->
+  <div class="logo-wrap">
+    <!-- Chupa Chups inspired flower SVG -->
+    <svg class="logo-flower" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Petals -->
+      <ellipse cx="50" cy="22" rx="10" ry="16" fill="#EE2124" transform="rotate(0 50 50)"/>
+      <ellipse cx="50" cy="22" rx="10" ry="16" fill="#FFD700" transform="rotate(45 50 50)"/>
+      <ellipse cx="50" cy="22" rx="10" ry="16" fill="#EE2124" transform="rotate(90 50 50)"/>
+      <ellipse cx="50" cy="22" rx="10" ry="16" fill="#FFD700" transform="rotate(135 50 50)"/>
+      <ellipse cx="50" cy="22" rx="10" ry="16" fill="#EE2124" transform="rotate(180 50 50)"/>
+      <ellipse cx="50" cy="22" rx="10" ry="16" fill="#FFD700" transform="rotate(225 50 50)"/>
+      <ellipse cx="50" cy="22" rx="10" ry="16" fill="#EE2124" transform="rotate(270 50 50)"/>
+      <ellipse cx="50" cy="22" rx="10" ry="16" fill="#FFD700" transform="rotate(315 50 50)"/>
+      <!-- Center circle -->
+      <circle cx="50" cy="50" r="20" fill="#EE2124" />
+      <circle cx="50" cy="50" r="14" fill="#FFD700" />
+      <text x="50" y="55" text-anchor="middle" font-family="Fredoka One,cursive" font-size="13" fill="#EE2124">POM</text>
+    </svg>
+    <div class="logo-title">Pomodoro</div>
+    <div class="logo-sub" id="logo-sub">Chupa Chups Edition</div>
+    <!-- Coca-Cola brand decoration -->
+    <svg class="logo-cola" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="#F40009"/>
+      <path d="M8 50 Q25 38 42 50 Q58 62 75 50 Q88 40 92 45 L92 55 Q88 60 75 55 Q58 43 42 55 Q25 67 8 55 Z" fill="white" opacity="0.9"/>
+      <text x="50" y="38" text-anchor="middle" font-family="Fredoka One,cursive" font-size="12" fill="white">Coca</text>
+      <text x="50" y="72" text-anchor="middle" font-family="Fredoka One,cursive" font-size="12" fill="white">Cola</text>
+    </svg>
+    <button id="btn-theme-toggle" onclick="toggleTheme()">🥤 Coca-Cola</button>
+  </div>
+
+  <!-- Mode Tabs -->
+  <div class="mode-tabs">
+    <button class="mode-btn active-focus" id="tab-focus"  onclick="switchMode('focus')">Focus</button>
+    <button class="mode-btn"              id="tab-break"  onclick="switchMode('break')">Short Break</button>
+    <button class="mode-btn"              id="tab-long"   onclick="switchMode('long')">Long Break</button>
+  </div>
+
+  <!-- Timer Card -->
+  <div class="card" id="card">
+    <!-- Circular Ring -->
+    <div class="ring-wrap">
+      <svg viewBox="0 0 220 220">
+        <circle class="ring-bg"       cx="110" cy="110" r="96" />
+        <circle class="ring-progress" cx="110" cy="110" r="96" id="ring" />
+      </svg>
+      <div class="ring-center">
+        <div class="time-display" id="time-display">25:00</div>
+        <div class="mode-label"   id="mode-label">Focus</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn btn-secondary" id="btn-reset"  onclick="resetTimer()" title="Reset">↺ Reset</button>
+      <button class="btn btn-primary"   id="btn-start"  onclick="startTimer()">Start</button>
+      <button class="btn btn-secondary inactive" id="btn-pause" onclick="pauseTimer()">Pause</button>
+    </div>
+
+    <!-- Session Counter -->
+    <div class="session-row">
+      <div class="session-label">Sessions completed</div>
+      <div class="dots-row" id="dots-row"></div>
+    </div>
+  </div>
+
+  <!-- Lollipop stick -->
+  <div class="stick-wrap"><div class="stick"></div></div>
+
+  <!-- Settings -->
+  <div class="settings-row">
+    <div class="setting-group">
+      <label>Focus (min)</label>
+      <input type="number" id="input-focus" value="25" min="1" max="99" onchange="onSettingChange()" />
+    </div>
+    <div class="setting-group">
+      <label>Short Break</label>
+      <input type="number" id="input-break" value="10" min="1" max="99" onchange="onSettingChange()" />
+    </div>
+    <div class="setting-group">
+      <label>Long Break</label>
+      <input type="number" id="input-long" value="15" min="1" max="99" onchange="onSettingChange()" />
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ─── State ────────────────────────────────────────────────
+    const MODES = { focus: 'focus', break: 'break', long: 'long' };
+
+    let currentMode    = MODES.focus;
+    let running        = false;
+    let secondsLeft    = 0;
+    let totalSeconds   = 0;
+    let intervalId     = null;
+    let sessions       = 0;           // completed focus sessions
+    const SESSIONS_FOR_LONG = 4;
+    let startTimestamp = 0;
+    let startRemaining = 0;
+    let notificationPermissionRequested = false;
+
+    // ─── Ring maths ───────────────────────────────────────────
+    const RADIUS        = 96;
+    const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+    const ring        = document.getElementById('ring');
+    const timeDisplay = document.getElementById('time-display');
+    const modeLabel   = document.getElementById('mode-label');
+    const btnStart    = document.getElementById('btn-start');
+    const btnPause    = document.getElementById('btn-pause');
+    const dotsRow     = document.getElementById('dots-row');
+
+    ring.style.strokeDasharray  = CIRCUMFERENCE;
+    ring.style.strokeDashoffset = 0;
+
+    // ─── Init ─────────────────────────────────────────────────
+    function getDurations() {
+      return {
+        focus: parseInt(document.getElementById('input-focus').value) || 25,
+        break: parseInt(document.getElementById('input-break').value) || 10,
+        long:  parseInt(document.getElementById('input-long').value)  || 15,
+      };
+    }
+
+    function init() {
+      const dur   = getDurations();
+      totalSeconds  = dur[currentMode] * 60;
+      secondsLeft   = totalSeconds;
+      updateDisplay();
+      updateRing(1);
+      updateDots();
+    }
+
+    // ─── Display helpers ──────────────────────────────────────
+    function formatTime(s) {
+      const m = String(Math.floor(s / 60)).padStart(2, '0');
+      const sec = String(s % 60).padStart(2, '0');
+      return `${m}:${sec}`;
+    }
+
+    function updateDisplay() {
+      timeDisplay.textContent = formatTime(secondsLeft);
+      document.title = `${formatTime(secondsLeft)} — Pomodoro`;
+
+      const labels = { focus: 'Focus', break: 'Short Break', long: 'Long Break' };
+      modeLabel.textContent = labels[currentMode];
+    }
+
+    function updateRing(fraction) {
+      ring.style.strokeDashoffset = CIRCUMFERENCE * (1 - fraction);
+      const varNames = { focus: '--ring-focus', break: '--ring-break', long: '--ring-long' };
+      ring.style.stroke = getComputedStyle(document.documentElement).getPropertyValue(varNames[currentMode]).trim();
+    }
+
+    function updateDots() {
+      dotsRow.innerHTML = '';
+      for (let i = 0; i < SESSIONS_FOR_LONG; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i < sessions % SESSIONS_FOR_LONG ? ' filled' : '');
+        if (sessions > 0 && sessions % SESSIONS_FOR_LONG === 0 && i === SESSIONS_FOR_LONG - 1) {
+          dot.className = 'dot long';
+        }
+        dotsRow.appendChild(dot);
+      }
+    }
+
+    function updateButtonStyle() {
+      btnStart.className = 'btn btn-primary';
+      if (currentMode === 'break') btnStart.classList.add('break-mode');
+      if (currentMode === 'long')  btnStart.classList.add('long-mode');
+    }
+
+    // ─── Tab switching ────────────────────────────────────────
+    function switchMode(mode) {
+      if (running) { clearInterval(intervalId); running = false; }
+      currentMode = mode;
+
+      document.getElementById('tab-focus').className = 'mode-btn' + (mode === 'focus' ? ' active-focus' : '');
+      document.getElementById('tab-break').className = 'mode-btn' + (mode === 'break' ? ' active-break' : '');
+      document.getElementById('tab-long').className  = 'mode-btn' + (mode === 'long'  ? ' active-long'  : '');
+
+      document.body.setAttribute('data-mode', mode === 'focus' ? 'focus' : 'rest');
+      updateButtonStyle();
+      updateButtonStates();
+      init();
+    }
+
+    // ─── Timer ────────────────────────────────────────────────
+    function startTimer() {
+      if (running) return;
+      if (!notificationPermissionRequested) {
+        notificationPermissionRequested = true;
+        requestNotificationPermission();
+      }
+      running = true;
+      startTimestamp = Date.now();
+      startRemaining = secondsLeft;
+      intervalId = setInterval(tick, 1000);
+      updateButtonStates();
+    }
+
+    function pauseTimer() {
+      if (!running) return;
+      clearInterval(intervalId);
+      running = false;
+      updateButtonStates();
+    }
+
+    function tick() {
+      const elapsed = Date.now() - startTimestamp;
+      secondsLeft = Math.max(0, Math.ceil(startRemaining - elapsed / 1000));
+      if (secondsLeft <= 0) {
+        clearInterval(intervalId);
+        running = false;
+        secondsLeft = 0;
+        updateDisplay();
+        updateRing(0);
+        onTimerEnd();
+        return;
+      }
+      updateDisplay();
+      updateRing(secondsLeft / totalSeconds);
+    }
+
+    function resetTimer() {
+      clearInterval(intervalId);
+      running = false;
+      updateButtonStates();
+      init();
+    }
+
+    function onSettingChange() {
+      if (!running) resetTimer();
+    }
+
+    // ─── Session end logic ────────────────────────────────────
+    function onTimerEnd() {
+      playChime();
+      updateButtonStates();
+
+      if (currentMode === MODES.focus) {
+        sessions++;
+        updateDots();
+        const isLongBreak = sessions % SESSIONS_FOR_LONG === 0;
+        const nextMode    = isLongBreak ? 'long' : 'break';
+        const msg         = isLongBreak
+          ? `🎉 ${sessions} sessions done! Time for a long break!`
+          : '✅ Focus session done! Take a short break.';
+        notify(msg);
+        setTimeout(() => switchMode(nextMode), 1500);
+      } else {
+        notify('☕ Break over — time to focus!');
+        setTimeout(() => switchMode('focus'), 1500);
+      }
+    }
+
+    // ─── Audio ────────────────────────────────────────────────
+    function playChime() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function tone(freq, start, dur, vol) {
+          const osc  = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+          gain.gain.setValueAtTime(vol, ctx.currentTime + start);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+          osc.start(ctx.currentTime + start);
+          osc.stop(ctx.currentTime + start + dur + 0.05);
+        }
+
+        tone(523, 0.0, 0.35, 0.4);   // C5
+        tone(659, 0.2, 0.35, 0.4);   // E5
+        tone(784, 0.4, 0.55, 0.4);   // G5
+      } catch (_) { /* audio not available */ }
+    }
+
+    // ─── Toast ────────────────────────────────────────────────
+    let toastTimeout = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // ─── Button States ──────────────────────────────────────
+    function updateButtonStates() {
+      if (running) {
+        btnStart.classList.add('inactive');
+        btnPause.classList.remove('inactive');
+      } else {
+        btnStart.classList.remove('inactive');
+        btnPause.classList.add('inactive');
+      }
+    }
+
+    // ─── Notifications ──────────────────────────────────────
+    function requestNotificationPermission() {
+      if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+    }
+
+    function notify(message) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('Pomodoro', { body: message });
+      } else {
+        const card = document.getElementById('card');
+        card.classList.add('flash');
+        setTimeout(() => card.classList.remove('flash'), 900);
+        showToast(message);
+      }
+    }
+
+    // ─── Theme ────────────────────────────────────────────
+    let currentTheme = 'chupa-chups';
+
+    function applyTheme(theme) {
+      currentTheme = theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      const btn = document.getElementById('btn-theme-toggle');
+      if (btn) btn.textContent = theme === 'coca-cola' ? '🍭 Chupa Chups' : '🥤 Coca-Cola';
+      const sub = document.getElementById('logo-sub');
+      if (sub) sub.textContent = theme === 'coca-cola' ? 'Coca-Cola Edition' : 'Chupa Chups Edition';
+      localStorage.setItem('pomodoroTheme', theme);
+      if (totalSeconds > 0) updateRing(secondsLeft / totalSeconds);
+    }
+
+    function toggleTheme() {
+      applyTheme(currentTheme === 'chupa-chups' ? 'coca-cola' : 'chupa-chups');
+    }
+
+    // ─── Bootstrap ───────────────────────────────────────────
+    updateButtonStyle();
+    updateButtonStates();
+    init();
+    applyTheme(localStorage.getItem('pomodoroTheme') || 'chupa-chups');
+  </script>
+</body>
+</html>
