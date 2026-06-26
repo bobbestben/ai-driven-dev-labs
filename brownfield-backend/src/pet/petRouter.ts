@@ -1,6 +1,8 @@
 import { Router, Request, Response } from "express";
 import { PetService } from "./petService";
 import { Pet } from "./pet";
+import { AppDataSource } from "../database";
+import { Owner } from "../owner/owner";
 
 export const petRouter = Router();
 const petService = new PetService();
@@ -66,7 +68,13 @@ petRouter.get("/:id", async (req: Request, res: Response) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Pet'
+ *             type: object
+ *             required: [name, ownerId]
+ *             properties:
+ *               name:
+ *                 type: string
+ *               ownerId:
+ *                 type: integer
  *     responses:
  *       201:
  *         description: Pet created
@@ -74,8 +82,13 @@ petRouter.get("/:id", async (req: Request, res: Response) => {
  *         description: Validation error
  */
 petRouter.post("/", async (req: Request, res: Response) => {
-  const { name, ownerName } = req.body as { name: string; ownerName: string };
-  const pet = new Pet(name, ownerName);
+  const { name, ownerId } = req.body as { name: string; ownerId: number };
+  const owner = await AppDataSource.getRepository(Owner).findOneBy({ id: ownerId });
+  if (!owner) {
+    res.status(400).json({ message: `Owner with id ${ownerId} not found` });
+    return;
+  }
+  const pet = new Pet(name, owner);
   try {
     const saved = await petService.save(pet);
     res.status(201).json(saved);

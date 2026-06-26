@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Owner } from "../owner/owner";
 
 /**
  * @openapi
@@ -11,8 +12,8 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
  *           type: integer
  *         name:
  *           type: string
- *         ownerName:
- *           type: string
+ *         owner:
+ *           $ref: '#/components/schemas/Owner'
  */
 @Entity()
 export class Pet {
@@ -22,11 +23,12 @@ export class Pet {
   @Column({ type: "varchar" })
   readonly name!: string;
 
-  @Column({ name: "owner_name", type: "varchar" })
-  readonly ownerName!: string;
+  @ManyToOne(() => Owner)
+  @JoinColumn({ name: "owner_id" })
+  readonly owner!: Owner;
 
-  constructor(name?: string, ownerName?: string) {
+  constructor(name?: string, owner?: Owner) {
     if (name !== undefined) this.name = name;
-    if (ownerName !== undefined) this.ownerName = ownerName;
+    if (owner !== undefined) this.owner = owner;
   }
 }

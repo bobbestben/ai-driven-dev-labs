@@ -8,23 +8,27 @@ export class PetRepository {
   constructor(private dataSource?: DataSource) {}
 
   findAll(): Promise<Pet[]> {
-    return this.repository.find();
+    return this.repository.find({ relations: ["owner"] });
   }
 
   findById(id: number): Promise<Pet | null> {
-    return this.repository.findOneBy({ id });
+    return this.repository.findOne({ where: { id }, relations: ["owner"] });
   }
 
   findByName(name: string): Promise<Pet | null> {
-    return this.repository.findOneBy({ name });
+    return this.repository.findOne({ where: { name }, relations: ["owner"] });
   }
 
-  findByNameAndOwnerName(name: string, ownerName: string): Promise<Pet | null> {
-    return this.repository.findOneBy({ name, ownerName });
+  findByNameAndOwnerId(name: string, ownerId: number): Promise<Pet | null> {
+    return this.repository.findOne({
+      where: { name, owner: { id: ownerId } },
+      relations: ["owner"],
+    });
   }
 
-  save(pet: Pet): Promise<Pet> {
-    return this.repository.save(pet);
+  async save(pet: Pet): Promise<Pet> {
+    const saved = await this.repository.save(pet);
+    return (await this.repository.findOne({ where: { id: saved.id }, relations: ["owner"] }))!;
   }
 
   async delete(id: number): Promise<void> {

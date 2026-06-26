@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { Owner } from "../src/owner/owner";
 import { Pet } from "../src/pet/pet";
 import { Vet } from "../src/vet/vet";
 import { Visit } from "../src/visit/visit";
@@ -12,7 +13,7 @@ export async function createTestDataSource(): Promise<DataSource> {
     type: "better-sqlite3",
     database: ":memory:",
     synchronize: false,
-    entities: [Pet, Vet, Visit, Invoice],
+    entities: [Owner, Pet, Vet, Visit, Invoice],
   });
 
   await dataSource.initialize();

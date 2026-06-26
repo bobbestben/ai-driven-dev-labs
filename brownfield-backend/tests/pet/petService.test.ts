@@ -4,6 +4,7 @@ import { createTestDataSource } from "../testDataSource";
 import { PetRepository } from "../../src/pet/petRepository";
 import { PetService } from "../../src/pet/petService";
 import { Pet } from "../../src/pet/pet";
+import { Owner } from "../../src/owner/owner";
 
 let dataSource: DataSource;
 let petService: PetService;
@@ -37,6 +38,7 @@ describe("PetService", () => {
     // then
     expect(pet).not.toBeNull();
     expect(pet?.name).toBe("Max");
+    expect(pet?.owner.name).toBe("John Smith");
   });
 
   it("should return null when pet id does not exist", async () => {
@@ -52,7 +54,8 @@ describe("PetService", () => {
 
   it("should save a new pet", async () => {
     // given
-    const pet = new Pet("Buddy", "Alice");
+    const owner = await dataSource.getRepository(Owner).save(new Owner("Alice", "10 New St"));
+    const pet = new Pet("Buddy", owner);
 
     // when
     const saved = await petService.save(pet);
@@ -60,14 +63,15 @@ describe("PetService", () => {
     // then
     expect(saved.id).toBeDefined();
     expect(saved.name).toBe("Buddy");
-    expect(saved.ownerName).toBe("Alice");
+    expect(saved.owner.name).toBe("Alice");
   });
 
   it("should not allow duplicate pet name for the same owner", async () => {
     // given
-    const pet1 = new Pet("Rex", "Bob");
+    const owner = await dataSource.getRepository(Owner).save(new Owner("Bob", "20 Oak Ave"));
+    const pet1 = new Pet("Rex", owner);
     await petService.save(pet1);
-    const duplicate = new Pet("Rex", "Bob");
+    const duplicate = new Pet("Rex", owner);
 
     // when & then
     await expect(petService.save(duplicate)).rejects.toThrow(
@@ -77,8 +81,10 @@ describe("PetService", () => {
 
   it("should allow different owners to have pets with the same name", async () => {
     // given
-    const pet1 = new Pet("Charlie", "Carol");
-    const pet2 = new Pet("Charlie", "Dave");
+    const owner1 = await dataSource.getRepository(Owner).save(new Owner("Carol", "30 Pine Rd"));
+    const owner2 = await dataSource.getRepository(Owner).save(new Owner("Dave", "40 Elm St"));
+    const pet1 = new Pet("Charlie", owner1);
+    const pet2 = new Pet("Charlie", owner2);
 
     // when
     const saved1 = await petService.save(pet1);
@@ -90,3 +96,4 @@ describe("PetService", () => {
     expect(saved1.id).not.toBe(saved2.id);
   });
 });
+

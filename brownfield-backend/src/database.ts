@@ -6,12 +6,13 @@ import { Pet } from "./pet/pet";
 import { Vet } from "./vet/vet";
 import { Visit } from "./visit/visit";
 import { Invoice } from "./invoice/invoice";
+import { Owner } from "./owner/owner";
 
 export const AppDataSource = new DataSource({
   type: "better-sqlite3",
   database: ":memory:",
   synchronize: false,
-  entities: [Pet, Vet, Visit, Invoice],
+  entities: [Owner, Pet, Vet, Visit, Invoice],
 });
 
 export async function initializeDatabase(): Promise<void> {

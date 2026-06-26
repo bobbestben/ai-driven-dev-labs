@@ -3,20 +3,35 @@ DROP TABLE IF EXISTS invoice;
 DROP TABLE IF EXISTS visit;
 DROP TABLE IF EXISTS vet;
 DROP TABLE IF EXISTS pet;
+DROP TABLE IF EXISTS owner;
+
+-- Schema for Owner table
+CREATE TABLE IF NOT EXISTS owner (
+    id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    name    VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL
+);
+
+-- Seed data for Owner
+INSERT INTO owner (id, name, address) VALUES (1, 'John Smith', '123 Main St');
+INSERT INTO owner (id, name, address) VALUES (2, 'Sarah Johnson', '456 Oak Ave');
+INSERT INTO owner (id, name, address) VALUES (3, 'Emily Davis', '789 Pine Rd');
+INSERT INTO owner (id, name, address) VALUES (4, 'Michael Brown', '321 Elm St');
 
 -- Schema for Pet table
 CREATE TABLE IF NOT EXISTS pet (
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    name       VARCHAR(255) NOT NULL,
-    owner_name VARCHAR(255) NOT NULL
+    id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    name     VARCHAR(255) NOT NULL,
+    owner_id INTEGER NOT NULL,
+    FOREIGN KEY (owner_id) REFERENCES owner(id)
 );
 
--- Test data for Pet
-INSERT INTO pet (name, owner_name) VALUES ('Max', 'John Smith');
-INSERT INTO pet (name, owner_name) VALUES ('Bella', 'Sarah Johnson');
-INSERT INTO pet (name, owner_name) VALUES ('Charlie', 'John Smith');
-INSERT INTO pet (name, owner_name) VALUES ('Luna', 'Emily Davis');
-INSERT INTO pet (name, owner_name) VALUES ('Rocky', 'Michael Brown');
+-- Seed data for Pet
+INSERT INTO pet (name, owner_id) VALUES ('Max', 1);
+INSERT INTO pet (name, owner_id) VALUES ('Bella', 2);
+INSERT INTO pet (name, owner_id) VALUES ('Charlie', 1);
+INSERT INTO pet (name, owner_id) VALUES ('Luna', 3);
+INSERT INTO pet (name, owner_id) VALUES ('Rocky', 4);
 
 -- Schema for Vet table
 CREATE TABLE IF NOT EXISTS vet (

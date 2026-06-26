@@ -30,13 +30,13 @@ export class PetService {
   }
 
   private async validatePetUniquenessPerOwner(pet: Pet): Promise<void> {
-    const existing = await this.petRepository.findByNameAndOwnerName(
+    const existing = await this.petRepository.findByNameAndOwnerId(
       pet.name,
-      pet.ownerName,
+      pet.owner.id,
     );
     if (existing !== null && existing.id !== pet.id) {
       throw new Error(
-        `Owner ${pet.ownerName} already has a pet named ${pet.name}`,
+        `Owner ${pet.owner.name} already has a pet named ${pet.name}`,
       );
     }
   }
