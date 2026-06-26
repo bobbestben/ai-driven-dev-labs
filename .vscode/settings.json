@@ -4,7 +4,7 @@
     "files.exclude": {
         "greenfield-backend/": false,
         "greenfield-frontend/": false,
-        "brownfield-backend/": false,
-        "brownfield-frontend/": false
+        "brownfield-backend/": true,
+        "brownfield-frontend/": true
     }
 }

@@ -1,9 +1,13 @@
 import "reflect-metadata";
 import express from "express";
+import cors from "cors";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import { initializeDatabase } from "./database";
+import { petRouter } from "./pet/petRouter";
 
 export const app = express();
+app.use(cors());
 app.use(express.json());
 
 const swaggerOptions: swaggerJsdoc.Options = {
@@ -21,5 +25,13 @@ const swaggerOptions: swaggerJsdoc.Options = {
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.use(petRouter);
 
 const PORT = process.env.PORT ?? 8080;
+
+initializeDatabase().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Swagger UI available at http://localhost:${PORT}/api-docs`);
+  });
+});
