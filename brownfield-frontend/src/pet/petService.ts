@@ -1,9 +1,15 @@
 const API_BASE_URL = "http://localhost:8080/api/v1/pets";
 
+export interface Owner {
+  id: number;
+  name: string;
+  address: string;
+}
+
 export interface Pet {
   id?: number;
   name: string;
-  ownerName: string;
+  owner: Owner;
 }
 
 export const petService = {

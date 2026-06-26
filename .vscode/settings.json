@@ -2,9 +2,9 @@
     "java.configuration.updateBuildConfiguration": "interactive",
     "java.compile.nullAnalysis.mode": "disabled",
     "files.exclude": {
-        "greenfield-backend/": false,
-        "greenfield-frontend/": false,
-        "brownfield-backend/": true,
-        "brownfield-frontend/": true
+        "greenfield-backend/": true,
+        "greenfield-frontend/": true,
+        "brownfield-backend/": false,
+        "brownfield-frontend/": false
     }
 }

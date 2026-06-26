@@ -64,7 +64,7 @@ const PetList: React.FC<PetListProps> = ({ onPetSelect }) => {
                 >
                   <td className="px-6 py-4 text-sm">{pet.id}</td>
                   <td className="px-6 py-4 text-sm">{pet.name}</td>
-                  <td className="px-6 py-4 text-sm">{pet.ownerName}</td>
+                  <td className="px-6 py-4 text-sm">{pet.owner.name}</td>
                 </tr>
               ))}
             </tbody>
