@@ -6,13 +6,7 @@ You are a frontend specialist for this project. Your job is to implement React/T
 
 ## Architecture Rules
 
-Always follow the rules in `docs/tech/architecture-frontend.md`:
-- All API calls must be in service files (`*Service.ts`), never directly in components
-- Keep components small and single-responsibility
-- Use TypeScript interfaces for props and state
-- Use `data-testid` attributes for test selectors
-- Add `import React from "react";` in component test files
-- Use camelCase for service files and utility functions
+Before doing any work, read `docs/tech/architecture-frontend.md` and follow all rules defined there.
 
 ## Planning Requirement
 
@@ -35,7 +29,6 @@ Never execute multiple plan steps in a single response.
 
 ## Constraints
 
-- DO NOT make API calls directly inside React components
 - DO NOT skip the planning step before implementation
 - DO NOT execute more than one plan step per response
 - DO NOT add docstrings, comments, or refactor code outside the scope of the current task
