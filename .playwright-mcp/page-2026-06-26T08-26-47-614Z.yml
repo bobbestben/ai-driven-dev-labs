@@ -1,0 +1,100 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e7]
+      - generic [ref=e13]:
+        - heading "Pet Directory" [level=1] [ref=e14]
+        - paragraph [ref=e15]: Managing your furry friends
+    - navigation [ref=e18]:
+      - button "Pets" [ref=e19] [cursor=pointer]
+      - button "Visits" [active] [ref=e20] [cursor=pointer]
+      - button "Vets" [ref=e21] [cursor=pointer]
+      - button "Invoices" [ref=e22] [cursor=pointer]
+  - main [ref=e23]:
+    - generic [ref=e58]:
+      - generic [ref=e59]:
+        - heading "All Visits" [level=2] [ref=e60]
+        - paragraph [ref=e61]: View all veterinary visits across all pets
+      - table [ref=e63]:
+        - rowgroup [ref=e64]:
+          - row "User ID Date & Time Clinic Pet Name Owner of Pet Veterinarian Specialty" [ref=e65]:
+            - columnheader "User ID" [ref=e66]
+            - columnheader "Date & Time" [ref=e67]
+            - columnheader "Clinic" [ref=e68]
+            - columnheader "Pet Name" [ref=e69]
+            - columnheader "Owner of Pet" [ref=e70]
+            - columnheader "Veterinarian" [ref=e71]
+            - columnheader "Specialty" [ref=e72]
+        - rowgroup [ref=e73]:
+          - row "01 Nov 15, 2025, 09:30 AM Downtown Clinic Max N/A Dr. Sarah Martinez Surgery" [ref=e74] [cursor=pointer]:
+            - cell "01" [ref=e75]
+            - cell "Nov 15, 2025, 09:30 AM" [ref=e76]
+            - cell "Downtown Clinic" [ref=e77]
+            - cell "Max" [ref=e78]
+            - cell "N/A" [ref=e79]
+            - cell "Dr. Sarah Martinez" [ref=e80]
+            - cell "Surgery" [ref=e81]:
+              - generic [ref=e82]: Surgery
+          - row "02 Nov 18, 2025, 02:00 PM North Branch Max N/A Dr. Emily Rodriguez General Practice" [ref=e83] [cursor=pointer]:
+            - cell "02" [ref=e84]
+            - cell "Nov 18, 2025, 02:00 PM" [ref=e85]
+            - cell "North Branch" [ref=e86]
+            - cell "Max" [ref=e87]
+            - cell "N/A" [ref=e88]
+            - cell "Dr. Emily Rodriguez" [ref=e89]
+            - cell "General Practice" [ref=e90]:
+              - generic [ref=e91]: General Practice
+          - row "03 Nov 10, 2025, 10:15 AM East Side Clinic Bella N/A Dr. James Chen Dentistry" [ref=e92] [cursor=pointer]:
+            - cell "03" [ref=e93]
+            - cell "Nov 10, 2025, 10:15 AM" [ref=e94]
+            - cell "East Side Clinic" [ref=e95]
+            - cell "Bella" [ref=e96]
+            - cell "N/A" [ref=e97]
+            - cell "Dr. James Chen" [ref=e98]
+            - cell "Dentistry" [ref=e99]:
+              - generic [ref=e100]: Dentistry
+          - row "04 Nov 20, 2025, 11:45 AM Downtown Clinic Bella N/A Dr. Sarah Martinez Surgery" [ref=e101] [cursor=pointer]:
+            - cell "04" [ref=e102]
+            - cell "Nov 20, 2025, 11:45 AM" [ref=e103]
+            - cell "Downtown Clinic" [ref=e104]
+            - cell "Bella" [ref=e105]
+            - cell "N/A" [ref=e106]
+            - cell "Dr. Sarah Martinez" [ref=e107]
+            - cell "Surgery" [ref=e108]:
+              - generic [ref=e109]: Surgery
+          - row "05 Nov 12, 2025, 04:30 PM North Branch Charlie N/A Dr. Emily Rodriguez General Practice" [ref=e110] [cursor=pointer]:
+            - cell "05" [ref=e111]
+            - cell "Nov 12, 2025, 04:30 PM" [ref=e112]
+            - cell "North Branch" [ref=e113]
+            - cell "Charlie" [ref=e114]
+            - cell "N/A" [ref=e115]
+            - cell "Dr. Emily Rodriguez" [ref=e116]
+            - cell "General Practice" [ref=e117]:
+              - generic [ref=e118]: General Practice
+          - row "06 Nov 22, 2025, 08:00 AM East Side Clinic Luna N/A Dr. James Chen Dentistry" [ref=e119] [cursor=pointer]:
+            - cell "06" [ref=e120]
+            - cell "Nov 22, 2025, 08:00 AM" [ref=e121]
+            - cell "East Side Clinic" [ref=e122]
+            - cell "Luna" [ref=e123]
+            - cell "N/A" [ref=e124]
+            - cell "Dr. James Chen" [ref=e125]
+            - cell "Dentistry" [ref=e126]:
+              - generic [ref=e127]: Dentistry
+          - row "07 Nov 17, 2025, 01:20 PM Downtown Clinic Luna N/A Dr. Sarah Martinez Surgery" [ref=e128] [cursor=pointer]:
+            - cell "07" [ref=e129]
+            - cell "Nov 17, 2025, 01:20 PM" [ref=e130]
+            - cell "Downtown Clinic" [ref=e131]
+            - cell "Luna" [ref=e132]
+            - cell "N/A" [ref=e133]
+            - cell "Dr. Sarah Martinez" [ref=e134]
+            - cell "Surgery" [ref=e135]:
+              - generic [ref=e136]: Surgery
+          - row "08 Nov 21, 2025, 03:00 PM North Branch Luna N/A Dr. Michael Thompson Cardiology" [ref=e137] [cursor=pointer]:
+            - cell "08" [ref=e138]
+            - cell "Nov 21, 2025, 03:00 PM" [ref=e139]
+            - cell "North Branch" [ref=e140]
+            - cell "Luna" [ref=e141]
+            - cell "N/A" [ref=e142]
+            - cell "Dr. Michael Thompson" [ref=e143]
+            - cell "Cardiology" [ref=e144]:
+              - generic [ref=e145]: Cardiology

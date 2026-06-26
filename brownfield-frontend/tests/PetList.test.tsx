@@ -27,8 +27,8 @@ describe('PetList', () => {
 
   it('should display pet list when loaded successfully', async () => {
     const mockPets: Pet[] = [
-      { id: 1, name: 'Max', ownerName: 'John' },
-      { id: 2, name: 'Bella', ownerName: 'Jane' },
+      { id: 1, name: 'Max', owner: { id: 1, name: 'John', address: '123 Main St' } },
+      { id: 2, name: 'Bella', owner: { id: 2, name: 'Jane', address: '456 Oak Ave' } },
     ];
 
     vi.mocked(petService.findAll).mockResolvedValue(mockPets);
@@ -67,7 +67,7 @@ describe('PetList', () => {
 
   it('should display table headers when pets are loaded', async () => {
     const mockPets: Pet[] = [
-      { id: 1, name: 'Max', ownerName: 'John' },
+      { id: 1, name: 'Max', owner: { id: 1, name: 'John', address: '123 Main St' } },
     ];
 
     vi.mocked(petService.findAll).mockResolvedValue(mockPets);
@@ -75,9 +75,9 @@ describe('PetList', () => {
     render(<PetList onPetSelect={vi.fn()} />);
 
     await waitFor(() => {
-      expect(screen.getByText('ID')).toBeDefined();
-      expect(screen.getByText('Name')).toBeDefined();
-      expect(screen.getByText('Owner Name')).toBeDefined();
+      expect(screen.getByText('User ID')).toBeDefined();
+      expect(screen.getByText('Pet Name')).toBeDefined();
+      expect(screen.getByText('Owner of Pet')).toBeDefined();
     });
   });
 });

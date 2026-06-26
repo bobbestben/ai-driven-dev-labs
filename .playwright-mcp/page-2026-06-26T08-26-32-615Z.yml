@@ -1,0 +1,14 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e7]
+      - generic [ref=e13]:
+        - heading "Pet Directory" [level=1] [ref=e14]
+        - paragraph [ref=e15]: Managing your furry friends
+    - navigation [ref=e18]:
+      - button "Pets" [ref=e19] [cursor=pointer]
+      - button "Visits" [ref=e20] [cursor=pointer]
+      - button "Vets" [ref=e21] [cursor=pointer]
+      - button "Invoices" [ref=e22] [cursor=pointer]
+  - main [ref=e23]:
+    - generic [ref=e25]: Loading pets...

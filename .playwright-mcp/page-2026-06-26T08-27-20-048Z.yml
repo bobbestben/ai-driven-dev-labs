@@ -1,0 +1,44 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e7]
+      - generic [ref=e13]:
+        - heading "Pet Directory" [level=1] [ref=e14]
+        - paragraph [ref=e15]: Managing your furry friends
+    - navigation [ref=e18]:
+      - button "Pets" [active] [ref=e19] [cursor=pointer]
+      - button "Visits" [ref=e20] [cursor=pointer]
+      - button "Vets" [ref=e21] [cursor=pointer]
+      - button "Invoices" [ref=e22] [cursor=pointer]
+  - main [ref=e23]:
+    - generic [ref=e236]:
+      - generic [ref=e237]:
+        - heading "All Pets" [level=2] [ref=e238]
+        - paragraph [ref=e239]: Manage and view all pets in the directory
+      - table [ref=e241]:
+        - rowgroup [ref=e242]:
+          - row "User ID Pet Name Owner of Pet" [ref=e243]:
+            - columnheader "User ID" [ref=e244]
+            - columnheader "Pet Name" [ref=e245]
+            - columnheader "Owner of Pet" [ref=e246]
+        - rowgroup [ref=e247]:
+          - row "01 Max John Smith" [ref=e248] [cursor=pointer]:
+            - cell "01" [ref=e249]
+            - cell "Max" [ref=e250]
+            - cell "John Smith" [ref=e251]
+          - row "02 Bella Sarah Johnson" [ref=e252] [cursor=pointer]:
+            - cell "02" [ref=e253]
+            - cell "Bella" [ref=e254]
+            - cell "Sarah Johnson" [ref=e255]
+          - row "03 Charlie John Smith" [ref=e256] [cursor=pointer]:
+            - cell "03" [ref=e257]
+            - cell "Charlie" [ref=e258]
+            - cell "John Smith" [ref=e259]
+          - row "04 Luna Emily Davis" [ref=e260] [cursor=pointer]:
+            - cell "04" [ref=e261]
+            - cell "Luna" [ref=e262]
+            - cell "Emily Davis" [ref=e263]
+          - row "05 Rocky Michael Brown" [ref=e264] [cursor=pointer]:
+            - cell "05" [ref=e265]
+            - cell "Rocky" [ref=e266]
+            - cell "Michael Brown" [ref=e267]

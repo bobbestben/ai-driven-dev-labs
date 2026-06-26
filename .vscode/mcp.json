@@ -1,14 +1,18 @@
 {
     "servers": {
        "Framelink MCP for Figma": {
-                "command": "npx",
-                "args": [
-                    "-y",
-                    "figma-developer-mcp",
-                    "--figma-api-key={API_KEY}",
-                    "--stdio"
-                ],
-                "type": "stdio"
-            }
+            "command": "npx",
+            "args": [
+                "-y",
+                "figma-developer-mcp",
+                "--figma-api-key=input_figma_key_here",
+                "--stdio"
+            ],
+            "type": "stdio"
+        },
+        "playwright": {
+            "command": "npx",
+            "args": ["@playwright/mcp@latest"]
+        }
     }
 }

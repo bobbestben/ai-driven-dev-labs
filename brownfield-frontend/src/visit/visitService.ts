@@ -39,7 +39,7 @@ export const visitService = {
   },
 
   async findByPetId(petId: number): Promise<Visit[]> {
-    const response = await fetch(`${API_BASE_URL}/pet/${petId}`);
+    const response = await fetch(`${API_BASE_URL}?petId=${petId}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch visits for pet with id ${petId}`);
     }

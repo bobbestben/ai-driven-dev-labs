@@ -2,13 +2,13 @@
 
 ## Overview
 
-Pet Directory is a web application for managing pets, their veterinary visits, vets, and invoices. Use it to look up pets and their owners, browse visit history, check available veterinarians, and download invoices.
+**Pet Directory** is a web application for managing pets, their veterinary visits, vets, and invoices. Use it to look up pets and their owners, browse visit history, check available veterinarians, and download billing records.
 
 ---
 
 ## Getting Started
 
-Open the app in your browser. The top navigation bar has four sections: **Pets**, **Visits**, **Vets**, and **Invoices**. Click any button to switch between them.
+Open the app at `http://localhost:5173`. The header displays the **Pet Directory** logo and tagline. Below it, a tab bar lets you switch between **Pets**, **Visits**, **Vets**, and **Invoices**. The active tab is highlighted in green with an underline indicator.
 
 ---
 
@@ -16,11 +16,15 @@ Open the app in your browser. The top navigation bar has four sections: **Pets**
 
 ### Viewing Pets
 
-The default view shows a table of all pets with their **ID**, **Name**, and **Owner Name**. Click any row to open that pet's detail page.
+The default landing page shows the **All Pets** list — a table of every registered pet. Columns: **User ID**, **Pet Name**, and **Owner of Pet**. Click any row to open that pet's detail page.
+
+![Pets page](screenshots/pets.png)
 
 ### Pet Detail
 
-Shows the selected pet's name and owner, along with a table of all their visits (date, clinic). Click **Back** to return to the pet list.
+Shows the selected pet's name and owner along with their complete visit history. Click **← Back to Pets** to return to the list.
+
+![Pet detail page](screenshots/pet-detail.png)
 
 ---
 
@@ -28,20 +32,27 @@ Shows the selected pet's name and owner, along with a table of all their visits 
 
 ### Viewing Visits
 
-Displays all veterinary visits across the system. Columns: **ID**, **Date & Time**, **Clinic**, **Pet Name**, **Owner Name**, **Veterinarian**, and **Specialty**. Click a row to see full visit details.
+The **All Visits** page displays every veterinary visit across all pets. Columns: **User ID**, **Date & Time**, **Clinic**, **Pet Name**, **Owner of Pet**, **Veterinarian**, and **Specialty**. The **Specialty** column uses colour-coded badges — e.g. orange for Surgery, teal for Dentistry, green for General Practice, purple for Cardiology. Click a row to see the full visit detail.
 
-### Visit Detail
-
-Shows a full breakdown of the visit: date and clinic, pet and owner info, vet name and specialty, and the complete consultation summary. Click **Back** to return to the visit list.
+![Visits page](screenshots/visits.png)
 
 ---
 
 ## Vets
 
-Displays all veterinarians with their **ID**, **Name**, and **Specialty**. This is a read-only list.
+### Viewing Vets
+
+The **Our Veterinarians** page lists all vets with their **User ID**, **Veterinarian** name, and **Specialty** badge. This is a read-only directory.
+
+![Vets page](screenshots/vets.png)
 
 ---
 
 ## Invoices
 
-Displays all invoices with **Invoice #**, **Date**, **Amount**, **Clinic**, and **Pet**. Click the **Download PDF** button on any row to download that invoice.
+### Viewing Invoices
+
+The **All Invoices** page lists all billing records. Columns: **Invoice No.**, **Date & Time**, **Amount**, **Clinic**, and **Pet Name**. Click the **Download PDF** link on any row to download that invoice as a PDF.
+
+![Invoices page](screenshots/invoices.png)
+

@@ -33,68 +33,92 @@ const InvoiceList: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
   if (loading) {
-    return <div className="text-center py-8">Loading invoices...</div>;
+    return (
+      <div style={{ backgroundColor: '#fbfbff', minHeight: '100vh' }}>
+        <div className="container mx-auto px-8 py-8" style={{ color: '#7a7a7a' }}>Loading invoices...</div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-center py-8">Error: {error}</div>;
+    return (
+      <div style={{ backgroundColor: '#fbfbff', minHeight: '100vh' }}>
+        <div className="container mx-auto px-8 py-8" style={{ color: '#7a7a7a' }}>Error: {error}</div>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-6">Invoices</h2>
-      <div className="border rounded-lg overflow-hidden">
-        <table className="min-w-full divide-y">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Invoice #</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Amount</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Clinic</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Pet</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {invoices.map((invoice) => (
-              <tr key={invoice.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  {invoice.invoiceNumber}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  {formatDate(invoice.invoiceDate)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  ${invoice.amount.toFixed(2)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  {invoice.visit?.clinic}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  {invoice.visit?.pet?.name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button
-                    onClick={() => handleDownload(invoice.id)}
-                    className="underline hover:no-underline px-3 py-1 rounded-md transition-colors"
+    <div style={{ backgroundColor: '#fbfbff', minHeight: '100vh' }}>
+      <div className="container mx-auto px-8 py-8">
+        <div style={{ marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '28px', fontWeight: 500, color: '#00032c', marginBottom: '4px' }}>All Invoices</h2>
+          <p style={{ fontSize: '16px', fontWeight: 500, color: '#747474' }}>View and manage all billing and payment records</p>
+        </div>
+
+        {invoices.length === 0 ? (
+          <p style={{ color: '#7a7a7a' }}>No invoices found.</p>
+        ) : (
+          <div style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #e5e7eb' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f0f4ff' }}>
+                  <th style={{ padding: '14px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 600, color: '#040826' }}>Invoice No.</th>
+                  <th style={{ padding: '14px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 600, color: '#040826' }}>Date &amp; Time</th>
+                  <th style={{ padding: '14px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 600, color: '#040826' }}>Amount</th>
+                  <th style={{ padding: '14px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 600, color: '#040826' }}>Clinic</th>
+                  <th style={{ padding: '14px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 600, color: '#040826' }}>Pet Name</th>
+                  <th style={{ padding: '14px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 600, color: '#040826' }}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {invoices.map((invoice, index) => (
+                  <tr
+                    key={invoice.id}
+                    style={{
+                      borderTop: index > 0 ? '1px solid #e5e7eb' : undefined,
+                      backgroundColor: '#ffffff',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9f9ff')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
                   >
-                    Download PDF
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    <td style={{ padding: '14px 24px', fontSize: '14px', color: '#040826' }}>{invoice.invoiceNumber}</td>
+                    <td style={{ padding: '14px 24px', fontSize: '14px', color: '#040826' }}>{formatDate(invoice.invoiceDate)}</td>
+                    <td style={{ padding: '14px 24px', fontSize: '14px', color: '#040826' }}>${invoice.amount.toFixed(2)}</td>
+                    <td style={{ padding: '14px 24px', fontSize: '14px', color: '#040826' }}>{invoice.visit?.clinic}</td>
+                    <td style={{ padding: '14px 24px', fontSize: '14px', color: '#040826' }}>{invoice.visit?.pet?.name}</td>
+                    <td style={{ padding: '14px 24px', fontSize: '14px' }}>
+                      <button
+                        onClick={() => handleDownload(invoice.id)}
+                        style={{
+                          fontSize: '14px',
+                          color: '#040826',
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          textDecoration: 'underline',
+                          padding: 0,
+                        }}
+                      >
+                        Download PDF
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

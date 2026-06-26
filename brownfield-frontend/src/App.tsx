@@ -55,7 +55,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ backgroundColor: '#fbfbff' }}>
             <Header 
         currentView={currentView}
         onNavigateToPetList={handleNavigateToPetList}

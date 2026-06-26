@@ -1,6 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { vetService, type Vet } from './vetService';
 
+const specialtyBadgeStyle = (specialty: string): React.CSSProperties => {
+  const map: Record<string, { bg: string; color: string }> = {
+    Surgery: { bg: '#ffdbc d', color: '#d63f05' },
+    Dentistry: { bg: '#d8f9ff', color: '#0a97b4' },
+    'General Practice': { bg: '#b7ffd4', color: '#159548' },
+    Cardiology: { bg: '#cecaff', color: '#2519b2' },
+  };
+  const style = map[specialty] ?? { bg: '#e5e7eb', color: '#374151' };
+  return {
+    display: 'inline-block',
+    padding: '2px 10px',
+    borderRadius: '999px',
+    fontSize: '13px',
+    fontWeight: 500,
+    backgroundColor: style.bg,
+    color: style.color,
+  };
+};
+
 const VetList: React.FC = () => {
   const [vets, setVets] = useState<Vet[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,67 +45,66 @@ const VetList: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-6 py-8">
-        <div className="text-center">Loading vets...</div>
+      <div style={{ backgroundColor: '#fbfbff', minHeight: '100vh' }}>
+        <div className="container mx-auto px-8 py-8" style={{ color: '#7a7a7a' }}>Loading vets...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto px-6 py-8">
-        <div className="border px-4 py-3 rounded">
-          {error}
-        </div>
+      <div style={{ backgroundColor: '#fbfbff', minHeight: '100vh' }}>
+        <div className="container mx-auto px-8 py-8" style={{ color: '#7a7a7a' }}>{error}</div>
       </div>
     );
   }
 
   if (vets.length === 0) {
     return (
-      <div className="container mx-auto px-6 py-8">
-        <div className="text-center">No vets found.</div>
+      <div style={{ backgroundColor: '#fbfbff', minHeight: '100vh' }}>
+        <div className="container mx-auto px-8 py-8" style={{ color: '#7a7a7a' }}>No vets found.</div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-6 py-8">
-      <h2 className="text-3xl font-bold mb-6">Our Veterinarians</h2>
-      
-      <div className="border rounded-lg overflow-hidden">
-        <table className="min-w-full divide-y">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                Specialty
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {vets.map((vet) => (
-              <tr key={vet.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  {vet.id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium">{vet.name}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full border">
-                    {vet.specialty}
-                  </span>
-                </td>
+    <div style={{ backgroundColor: '#fbfbff', minHeight: '100vh' }}>
+      <div className="container mx-auto px-8 py-8">
+        <div style={{ marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '28px', fontWeight: 500, color: '#00032c', marginBottom: '4px' }}>Our Veterinarians</h2>
+          <p style={{ fontSize: '16px', fontWeight: 500, color: '#747474' }}>Meet and manage the vets who care for your pets</p>
+        </div>
+
+        <div style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #e5e7eb' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#f0f4ff' }}>
+                <th style={{ padding: '14px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 600, color: '#040826' }}>User ID</th>
+                <th style={{ padding: '14px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 600, color: '#040826' }}>Veterinarian</th>
+                <th style={{ padding: '14px 24px', textAlign: 'left', fontSize: '14px', fontWeight: 600, color: '#040826' }}>Specialty</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {vets.map((vet, index) => (
+                <tr
+                  key={vet.id}
+                  style={{
+                    borderTop: index > 0 ? '1px solid #e5e7eb' : undefined,
+                    backgroundColor: '#ffffff',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9f9ff')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
+                >
+                  <td style={{ padding: '14px 24px', fontSize: '14px', color: '#040826' }}>{String(vet.id).padStart(2, '0')}</td>
+                  <td style={{ padding: '14px 24px', fontSize: '14px', color: '#040826' }}>{vet.name}</td>
+                  <td style={{ padding: '14px 24px', fontSize: '14px' }}>
+                    <span style={specialtyBadgeStyle(vet.specialty)}>{vet.specialty}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
